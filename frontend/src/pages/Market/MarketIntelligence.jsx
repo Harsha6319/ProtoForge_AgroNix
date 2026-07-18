@@ -42,18 +42,18 @@ const MarketIntelligence = () => {
     <div className={styles.marketContainer}>
       <div className={styles.header}>
         <div>
-          <h2 className={styles.pageTitle}>{t('market.title') || 'Market Intelligence'}</h2>
-          <p className={styles.pageSubtitle}>{t('market.subtitle') || 'AI-powered market insights and predictions'}</p>
+          <h2 className={styles.pageTitle}>{'Market Intelligence'}</h2>
+          <p className={styles.pageSubtitle}>{'AI-powered market insights and predictions'}</p>
         </div>
         <div className={styles.controls}>
-          <input 
-            type="text" 
-            placeholder={t('market.search') || 'Search globally...'} 
+          <input
+            type="text"
+            placeholder={t('market.search') || 'Search globally...'}
             className={styles.searchBar}
           />
           <select value={selectedCrop} onChange={handleCropChange} className={styles.cropSelect}>
             {crops.map(crop => (
-              <option key={crop} value={crop}>{t(`market.crops.${crop}`) || crop}</option>
+              <option key={crop} value={crop}>{crop}</option>
             ))}
           </select>
           <button className={styles.exportBtn}>{t('market.export') || 'Export Data'}</button>

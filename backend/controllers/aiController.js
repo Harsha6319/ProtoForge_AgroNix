@@ -1,4 +1,5 @@
 const axios = require('axios');
+const ragService = require('../services/ragService');
 
 // Simulated Farm Context (In a real app, this would query the DB / ThingSpeak)
 const getFarmContext = () => {
@@ -19,6 +20,20 @@ Recent Market Data (Wheat):
 `;
 };
 
+exports.trainData = async (req, res) => {
+  try {
+    const { text, metadata } = req.body;
+    if (!text) {
+      return res.status(400).json({ success: false, message: 'Text data is required.' });
+    }
+    const chunksIngested = await ragService.addDocument(text, metadata);
+    res.status(200).json({ success: true, message: `Successfully ingested data into ${chunksIngested} chunks.` });
+  } catch (error) {
+    console.error("RAG Training Error:", error);
+    res.status(500).json({ success: false, message: 'Failed to ingest training data.', error: error.message });
+  }
+};
+
 exports.chat = async (req, res) => {
   try {
     const { message, language } = req.body;
@@ -32,6 +47,7 @@ exports.chat = async (req, res) => {
     }
 
     const farmContext = getFarmContext();
+    const historicalContext = await ragService.searchRelevantContext(message, 3);
     
     // Construct the System Prompt
     const systemPrompt = `You are Agronix AI, a highly advanced, professional, and friendly AI Assistant built specifically for Smart Farming. 
@@ -42,6 +58,11 @@ Here is the REAL-TIME DATA from the user's farm and local market. You MUST use t
 <FARM_AND_MARKET_DATA>
 ${farmContext}
 </FARM_AND_MARKET_DATA>
+
+${historicalContext ? `Here is some HISTORICAL DATA relevant to the user's query that you can use to provide better answers:
+<HISTORICAL_DATA>
+${historicalContext}
+</HISTORICAL_DATA>` : ''}
 
 CRITICAL INSTRUCTION:
 The user is speaking to you in the language code: "${language || 'en'}". 

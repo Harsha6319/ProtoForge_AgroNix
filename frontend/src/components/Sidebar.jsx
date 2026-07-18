@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FiHome, FiActivity, FiCloudDrizzle, FiCpu, FiClock, FiSettings, FiTrendingUp } from 'react-icons/fi';
+import { FiHome, FiActivity, FiCloudDrizzle, FiCpu, FiClock, FiTrendingUp } from 'react-icons/fi';
 import { PiPlantBold } from 'react-icons/pi';
 import { useLanguage } from '../contexts/LanguageContext';
 import styles from './Sidebar.module.css';
@@ -14,7 +14,6 @@ const Sidebar = () => {
     { path: '/market', icon: <FiTrendingUp />, label: t('nav.market') },
     { path: '/ai-assistant', icon: <FiCpu />, label: t('nav.ai_assistant') },
     { path: '/history', icon: <FiClock />, label: t('nav.history') },
-    { path: '/settings', icon: <FiSettings />, label: t('nav.settings') },
   ];
 
   return (
